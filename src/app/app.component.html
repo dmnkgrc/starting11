@@ -1,20 +1,173 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<mat-sidenav-container class="app-sidenav-container">
+  <mat-sidenav mode="side" #sidenav mode="side" [(opened)]="opened" (opened)="events.push('open!')"
+               (closed)="events.push('close!')">
+    <a mat-button color="primary" (click)="saveTeam()" class="save-icon">
+      <mat-icon>save</mat-icon>
+    </a>
+    <h2>Players</h2>
+    <mat-form-field class="filter-input">
+      <input matInput placeholder="Filter" [(ngModel)]="filter">
+    </mat-form-field>
+    <div
+      #availablePlayersList="cdkDropList"
+      cdkDropList class="players-list"
+      [cdkDropListData]="availablePlayers"
+      [cdkDropListConnectedTo]="[selectedPlayers0, selectedPlayers1, selectedPlayers2, selectedPlayers3, selectedPlayers4, selectedPlayers5, selectedPlayers6, selectedPlayers7, selectedPlayers8, selectedPlayers9, selectedPlayers10, selectedPlayers11]">
+      <mat-card class="player" cdkDrag *ngFor="let player of filteredPlayers()" [ngClass]="{'selected': isSelected(player.number)}">
+        {{player.number}} <span class="name">{{player.name}}</span>
+        <div *cdkDragPreview>
+          <img [src]="jerseySVG" />
+          <span>{{player.number}}</span>
+        </div>
+      </mat-card>
+    </div>
+  </mat-sidenav>
 
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <mat-toolbar-row>
+        <mat-icon (click)="sidenav.toggle()" class="menu-icon">menu</mat-icon>
+        <span>Select your Starting 11</span>
+      </mat-toolbar-row>
+    </mat-toolbar>
+    <div class="football-pitch">
+      <div class="corner">
+        <div class="corner1"></div>
+        <div class="corner2"></div>
+      </div>
+      <div class="semi1"></div>
+      <div class="middle-circle"></div>
+      <div class="interior"></div>
+      <div class="penalty"></div>
+      <mat-grid-list cols="12" class="players-field">
+        <mat-grid-tile
+            cdkDropList
+            [colspan]="4"
+            [rowspan]="2"
+            #selectedPlayers0="cdkDropList"
+            [cdkDropListData]="selectedPlayers"
+            (cdkDropListDropped)="drop($event, 0)"
+            [cdkDropListConnectedTo]="[availablePlayersList]" (click)="removeItem(0)">
+            <span class="number">{{selectedPlayers[0]?.number}}</span>
+            <img [src]="jerseySVG" cdkDrag [cdkDragDisabled]="true"/>
+        </mat-grid-tile>
+        <mat-grid-tile
+            [colspan]="8">
+        </mat-grid-tile>
+        <mat-grid-tile
+            cdkDropList
+            [colspan]="4"
+            [rowspan]="2"
+            #selectedPlayers1="cdkDropList"
+            [cdkDropListData]="selectedPlayers"
+            (cdkDropListDropped)="drop($event, 1)"
+            [cdkDropListConnectedTo]="[availablePlayersList]" (click)="removeItem(1)">
+            <span class="number">{{selectedPlayers[1]?.number}}</span>
+            <img [src]="jerseySVG" cdkDrag [cdkDragDisabled]="true"/>
+        </mat-grid-tile>
+        <mat-grid-tile
+            cdkDropList
+            [colspan]="4"
+            [rowspan]="2"
+            rselectedPlayers2="cdkDropList"
+            [cdkDropListData]="selectedPlayers"
+            (cdkDropListDropped)="drop($event, 2)"
+            [cdkDropListConnectedTo]="[availablePlayersList]" (click)="removeItem(2)">
+            <span class="number">{{selectedPlayers[2]?.number}}</span>
+            <img [src]="jerseySVG" cdkDrag [cdkDragDisabled]="true"/>
+        </mat-grid-tile>
+        <mat-grid-tile
+            cdkDropList
+            [colspan]="4"
+            #selectedPlayers3="cdkDropList"
+            [cdkDropListData]="selectedPlayers"
+            (cdkDropListDropped)="drop($event, 3)"
+            [cdkDropListConnectedTo]="[availablePlayersList]" (click)="removeItem(3)">
+            <span class="number">{{selectedPlayers[3]?.number}}</span>
+            <img [src]="jerseySVG" cdkDrag [cdkDragDisabled]="true"/>
+        </mat-grid-tile>
+        <mat-grid-tile
+            cdkDropList
+            [colspan]="2"
+            [rowspan]="2"
+            #selectedPlayers4="cdkDropList"
+            [cdkDropListData]="selectedPlayers"
+            (cdkDropListDropped)="drop($event, 4)"
+            [cdkDropListConnectedTo]="[availablePlayersList]" (click)="removeItem(4)">
+            <span class="number">{{selectedPlayers[4]?.number}}</span>
+            <img [src]="jerseySVG" cdkDrag [cdkDragDisabled]="true"/>
+        </mat-grid-tile>
+        <mat-grid-tile
+            [colspan]="2" [rowspan]="2">
+        </mat-grid-tile>
+        <mat-grid-tile
+            cdkDropList
+            [colspan]="4"
+            [rowspan]="2"
+            #selectedPlayers5="cdkDropList"
+            [cdkDropListData]="selectedPlayers"
+            (cdkDropListDropped)="drop($event, 5)"
+            [cdkDropListConnectedTo]="[availablePlayersList]" (click)="removeItem(5)">
+            <span class="number">{{selectedPlayers[5]?.number}}</span>
+            <img [src]="jerseySVG" cdkDrag [cdkDragDisabled]="true"/>
+        </mat-grid-tile>
+        <mat-grid-tile
+            cdkDropList
+            [colspan]="4"
+            [rowspan]="2"
+            #selectedPlayers6="cdkDropList"
+            [cdkDropListData]="selectedPlayers"
+            (cdkDropListDropped)="drop($event, 6)"
+            [cdkDropListConnectedTo]="[availablePlayersList]" (click)="removeItem(6)">
+            <span class="number">{{selectedPlayers[6]?.number}}</span>
+            <img [src]="jerseySVG" cdkDrag [cdkDragDisabled]="true"/>
+        </mat-grid-tile>
+        <mat-grid-tile
+            cdkDropList
+            [colspan]="4"
+            [rowspan]="2"
+            #selectedPlayers7="cdkDropList"
+            [cdkDropListData]="selectedPlayers"
+            (cdkDropListDropped)="drop($event, 7)"
+            [cdkDropListConnectedTo]="[availablePlayersList]" (click)="removeItem(7)">
+            <span class="number">{{selectedPlayers[7]?.number}}</span>
+            <img [src]="jerseySVG" cdkDrag [cdkDragDisabled]="true"/>
+        </mat-grid-tile>
+        <mat-grid-tile
+            cdkDropList
+            [colspan]="4"
+            [rowspan]="2"
+            #selectedPlayers8="cdkDropList"
+            [cdkDropListData]="selectedPlayers"
+            (cdkDropListDropped)="drop($event, 8)"
+            [cdkDropListConnectedTo]="[availablePlayersList]" (click)="removeItem(8)">
+            <span class="number">{{selectedPlayers[8]?.number}}</span>
+            <img [src]="jerseySVG" cdkDrag [cdkDragDisabled]="true"/>
+        </mat-grid-tile>
+        <mat-grid-tile
+            cdkDropList
+            [colspan]="4"
+            [rowspan]="2"
+            #selectedPlayers9="cdkDropList"
+            [cdkDropListData]="selectedPlayers"
+            (cdkDropListDropped)="drop($event, 9)"
+            [cdkDropListConnectedTo]="[availablePlayersList]" (click)="removeItem(9)">
+            <span class="number">{{selectedPlayers[9]?.number}}</span>
+            <img [src]="jerseySVG" cdkDrag [cdkDragDisabled]="true"/>
+        </mat-grid-tile>
+        <mat-grid-tile
+            cdkDropList
+            [colspan]="4"
+            [rowspan]="2"
+            #selectedPlayers10="cdkDropList"
+            [cdkDropListData]="selectedPlayers"
+            (cdkDropListDropped)="drop($event, 10)"
+            [cdkDropListConnectedTo]="[availablePlayersList]" (click)="removeItem(10)">
+            <span class="number">{{selectedPlayers[10]?.number}}</span>
+            <img [src]="jerseySVG" cdkDrag [cdkDragDisabled]="true"/>
+        </mat-grid-tile>
+      </mat-grid-list>
+      <!-- <h1>Test</h1> -->
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>;

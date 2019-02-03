@@ -1,1 +1,236 @@
 /* You can add global styles to this file, and also import other style files */
+@import "@angular/material/prebuilt-themes/indigo-pink.css";
+
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f3f3f3;
+}
+
+/** The drag preview **/
+.cdk-drag-preview {
+  img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+  }
+  span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    color: #fff;
+    font-size: 22px;
+  }
+}
+
+.app-sidenav-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fefefe;
+  .menu-icon {
+    flex: 1 1 auto;
+    cursor: pointer;
+  }
+
+  /* The styles to create the football pitch */
+  .football-pitch {
+    height: calc(100vh - 64px);
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    width: 100%;
+    background: #32B846;
+
+    /* Lines and position */
+    .interior, .middle-circle,
+    .semi1, .semi2,
+    .corner {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 94%;
+      height: 90%;
+      margin: auto;
+      border: 2px solid #eee;
+    }
+
+    /* Middle circle */
+    .middle-circle:before {
+      content: "";
+      position: absolute;
+      right: 0%;
+      top: 50%;
+      width: 16%;
+      margin-right: -8%;
+      transform: translateY(-50%);
+      height: 0;
+      padding-bottom: 16%;
+      border-radius: 50%;
+      border: 2px solid #eee;
+    }
+
+    /* Goal */
+    &:before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 3%;
+      display: block;
+      transform: translateY(-50%);
+      width: 6%;
+      height: 24%;
+      border: 2px solid #eee;
+      border-left: 0px;
+      z-index: 2;
+    }
+
+    /* Penalty area */
+    .interior:before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      display: block;
+      width: 16%;
+      height: 50%;
+      background: #32B846;
+      border: 2px solid #eee;
+      border-left: 0px;
+    }
+
+    /* Penalty spot */
+    .semi1:before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 12%;
+      display: block;
+      width: 1%;
+      height: 1.5%;
+      margin: -.75% 0 0 0;
+      background: #eee;
+      border-radius: 50%;
+      z-index: 2;
+    }
+
+    /* Semi-circle goal */
+    .semi1:after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 5%;
+      width: 16%;
+      height: 0;
+      margin: -8% 0 0 0;
+      padding-bottom: 16%;
+      border: 2px solid #eee;
+      border-radius: 50%;
+    }
+    .corner {
+      overflow: hidden;
+    }
+    .corner1:before, .corner2:before {
+      content: "";
+      position: absolute;
+      top: -6%;
+      left: -4%;
+      width: 6%;
+      height: 0;
+      margin: 0 0 0 0;
+      padding-bottom: 6%;
+      border: 2px solid #eee;
+      border-radius: 50%;
+    }
+
+    .corner2:before {
+      top: auto;
+      bottom: -6%;
+    }
+
+    /** Players styles **/
+    .players-field {
+      z-index: 100;
+      position: absolute;
+      left: 0;
+      width: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+      .cdk-drop-list-dragging {
+        img {
+          height: 68;
+          width: 60;
+          transform: unset !important;
+        }
+        .number {
+          display: none;
+        }
+      }
+      .number {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        color: #fff;
+        transform: translate(-50%, -50%);
+        font-size: 22px;
+      }
+      .player {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%)  !important;
+        background: transparent;
+        color: #fff;
+        box-shadow: none;
+        font-size: 24px;
+        .name {
+          display: none;
+        }
+        // display: none;
+      }
+    }
+  }
+  mat-sidenav {
+    width: 320px;
+    background: #f3f3f3;
+    .save-icon {
+      float: right;
+    }
+    .filter-input {
+      width: 95%;
+      margin: 0 2.5%;
+    }
+    h2 {
+      color: #4a4a4a;
+      text-align: center;
+    }
+    .players-list {
+      overflow: hidden;
+      padding: 0px 10px;
+      display: block;
+      .player {
+        background: white;
+        overflow: hidden;
+        display: block;
+        padding: 15px 10px;
+        margin-bottom: 10px;
+        &.selected {
+          background: #32B846;
+        }
+      }
+    }
+  }
+}
+
+
+

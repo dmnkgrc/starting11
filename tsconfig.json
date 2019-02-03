@@ -4,7 +4,7 @@
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
-    "declaration": false,
+    "declaration": true,
     "module": "es2015",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
@@ -12,11 +12,15 @@
     "importHelpers": true,
     "target": "es5",
     "typeRoots": [
-      "node_modules/@types"
+      "node_modules/@types",
+      "src/@types"
     ],
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "!!svg-url-loader?*": ["src/assets/*.svg"]
+   }
   }
 }

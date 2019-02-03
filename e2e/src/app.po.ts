@@ -1,4 +1,4 @@
-import { browser, by, element } from 'protractor';
+import { browser, by, element } from "protractor";
 
 export class AppPage {
   navigateTo() {
@@ -6,6 +6,10 @@ export class AppPage {
   }
 
   getTitleText() {
-    return element(by.css('app-root h1')).getText() as Promise<string>;
+    return element(by.css("app-root h1")).getText() as Promise<string>;
+  }
+
+  getJersey() {
+    return element(by.css("app-root img")).getAttribute("src") as Promise<string>;
   }
 }
