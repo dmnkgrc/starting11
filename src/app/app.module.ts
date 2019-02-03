@@ -2,6 +2,7 @@ import { BrowserModule } from "@angular/platform-browser";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { NgModule } from "@angular/core";
+import { HttpClientModule } from "@angular/common/http";
 import {
   MatButtonModule,
   MatCardModule,
@@ -10,7 +11,9 @@ import {
   MatToolbarModule,
   MatIconModule,
   MatFormFieldModule,
-  MatInputModule
+  MatInputModule,
+  MatExpansionModule,
+  MatListModule
 } from "@angular/material";
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { DeviceDetectorModule } from "ngx-device-detector";
@@ -33,6 +36,9 @@ import { AppComponent } from "./app.component";
     FormsModule,
     ReactiveFormsModule,
     MatInputModule,
+    HttpClientModule,
+    MatExpansionModule,
+    MatListModule,
     DeviceDetectorModule.forRoot()
   ],
   providers: [],

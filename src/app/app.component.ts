@@ -1,15 +1,16 @@
 import { Component } from "@angular/core";
 import { FormControl } from "@angular/forms";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { DeviceDetectorService } from "ngx-device-detector";
-import { CdkDragDrop, copyArrayItem } from "@angular/cdk/drag-drop";
-const jersey = require("!!svg-url-loader?limit=8000&noquotes&stripdeclarations!../assets/jersey.svg");
+import { TeamService } from "./team.service";
+import { CdkDragDrop, CdkDrag } from "@angular/cdk/drag-drop";
+import { capitalize, sortBy } from "lodash";
+import { Player, Team } from "./team";
+import * as moment from "moment";
 
-interface Player {
-  number: number;
-  name: string;
-  position: string;
-}
+const jersey = require("!!svg-url-loader?limit=8000&noquotes&stripdeclarations!../assets/jersey.svg");
 
 @Component({
   selector: "app-root",
@@ -26,9 +27,13 @@ export class AppComponent {
   // Lists of players
   availablePlayers = [];
   selectedPlayers = new Array(11);
+
+  teams$: Observable<Team[]>;
+
   constructor(
     private domSanitizer: DomSanitizer,
-    private deviceService: DeviceDetectorService
+    private deviceService: DeviceDetectorService,
+    public teamService: TeamService
   ) {
     // Get players
     this.availablePlayers = [
@@ -77,6 +82,11 @@ export class AppComponent {
       }
       return 1;
     });
+    this.teams$ = this.teamService.getTeams().pipe(
+      map(teams => {
+        return sortBy(teams, ["created_at"]).reverse();
+      })
+    );
     // Make angular trust the URL for the svg
     this.jerseySVG = domSanitizer.bypassSecurityTrustUrl(jersey);
     this.mobile = !this.deviceService.isDesktop();
@@ -87,7 +97,7 @@ export class AppComponent {
 
   isSelected(num: number): boolean {
     // Returns true if the player is already in the field
-    return this.selectedPlayers.some(player => player.number === num);
+    return this.selectedPlayers.some(player => player && player.number === num);
   }
 
   // Removes a selected player from the list
@@ -110,31 +120,59 @@ export class AppComponent {
   }
 
   // Save team to database
-  saveTeam() {}
+  saveTeam() {
+    if (confirm("Save progress?")) {
+      this.teamService.saveTeam(this.selectedPlayers).subscribe(team => {
+        this.teams$ = this.teamService.getTeams();
+      });
+    }
+  }
+
+  // Just capitalizes a string
+  capitalizeText(text: string) {
+    return capitalize(text);
+  }
+
+  // Converts timestamp to human date
+  toHuman(timestamp: string) {
+    return moment(timestamp).fromNow();
+  }
+
+  // Retrieve team
+  selectTeam(team: Team) {
+    this.selectedPlayers = [...team.players];
+  }
 
   // Drops a player into the field
   drop(event: CdkDragDrop<Player[]>, position) {
+    const data = event.previousContainer.data[event.previousIndex];
+    const positions = [
+      "defense",
+      "midfielder",
+      "forward",
+      "defense",
+      "goalkeeper",
+      "midfielder",
+      "forward",
+      "defense",
+      "midfielder",
+      "forward",
+      "defense"
+    ];
+    if (data.position !== positions[position]) {
+      return;
+    }
     if (event.previousContainer !== event.container) {
       // If player was previously selected, remove previous selection
-      if (
-        this.isSelected(
-          event.previousContainer.data[event.previousIndex].number
-        )
-      ) {
+      if (this.isSelected(data.number)) {
         const index = this.selectedPlayers.findIndex(
-          player =>
-            player.number ===
-            event.previousContainer.data[event.previousIndex].number
+          player => player.number === data.number
         );
         this.removeItem(index);
       }
       // Copies a player from the availablePlayers to the selectedPlayers array
-      copyArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        position
-      );
+      this.selectedPlayers[position] =
+        event.previousContainer.data[event.previousIndex];
     }
   }
 }

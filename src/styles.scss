@@ -206,6 +206,16 @@ body {
     .save-icon {
       float: right;
     }
+    .teams-container {
+      width: 100%;
+      margin-top: 50px;
+      .mat-expansion-panel-body {
+        padding: 0;
+        .mat-list-item {
+          border-bottom: 1px solid #f3f3f3;
+        }
+      }
+    }
     .filter-input {
       width: 95%;
       margin: 0 2.5%;

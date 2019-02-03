@@ -4,6 +4,25 @@
     <a mat-button color="primary" (click)="saveTeam()" class="save-icon">
       <mat-icon>save</mat-icon>
     </a>
+    <div *ngIf="(teams$ | async) as teams" class="teams-container">
+
+      <mat-accordion>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Saved teams
+            </mat-panel-title>
+            <mat-panel-description>
+              Click on a previously saved team to retrieve it
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <mat-action-list>
+            <button mat-list-item *ngFor="let team of teams" (click)="selectTeam(team)">Created {{toHuman(team.created_at)}}</button>
+          </mat-action-list>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
     <h2>Players</h2>
     <mat-form-field class="filter-input">
       <input matInput placeholder="Filter" [(ngModel)]="filter">
@@ -14,7 +33,7 @@
       [cdkDropListData]="availablePlayers"
       [cdkDropListConnectedTo]="[selectedPlayers0, selectedPlayers1, selectedPlayers2, selectedPlayers3, selectedPlayers4, selectedPlayers5, selectedPlayers6, selectedPlayers7, selectedPlayers8, selectedPlayers9, selectedPlayers10, selectedPlayers11]">
       <mat-card class="player" cdkDrag *ngFor="let player of filteredPlayers()" [ngClass]="{'selected': isSelected(player.number)}">
-        {{player.number}} <span class="name">{{player.name}}</span>
+        {{player.number}} <span class="name">{{player.name}} - {{capitalizeText(player.position)}}</span>
         <div *cdkDragPreview>
           <img [src]="jerseySVG" />
           <span>{{player.number}}</span>
@@ -39,7 +58,7 @@
       <div class="middle-circle"></div>
       <div class="interior"></div>
       <div class="penalty"></div>
-      <mat-grid-list cols="12" class="players-field">
+      <mat-grid-list cols="12" rowHeight="65px" class="players-field">
         <mat-grid-tile
             cdkDropList
             [colspan]="4"
@@ -69,7 +88,7 @@
             cdkDropList
             [colspan]="4"
             [rowspan]="2"
-            rselectedPlayers2="cdkDropList"
+            #selectedPlayers2="cdkDropList"
             [cdkDropListData]="selectedPlayers"
             (cdkDropListDropped)="drop($event, 2)"
             [cdkDropListConnectedTo]="[availablePlayersList]" (click)="removeItem(2)">
@@ -132,6 +151,10 @@
             [cdkDropListConnectedTo]="[availablePlayersList]" (click)="removeItem(7)">
             <span class="number">{{selectedPlayers[7]?.number}}</span>
             <img [src]="jerseySVG" cdkDrag [cdkDragDisabled]="true"/>
+        </mat-grid-tile>
+        <mat-grid-tile
+            [colspan]="8"
+            >
         </mat-grid-tile>
         <mat-grid-tile
             cdkDropList
