@@ -18,9 +18,6 @@
     "lib": [
       "es2018",
       "dom"
-    ],
-    "paths": {
-      "!!svg-url-loader?*": ["src/assets/*.svg"]
-   }
+    ]
   }
 }

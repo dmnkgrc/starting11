@@ -102,7 +102,7 @@ export class AppComponent {
 
   // Removes a selected player from the list
   removeItem(index: number) {
-    this.selectedPlayers.splice(index, 1);
+    this.selectedPlayers[index] = null;
   }
 
   // Gets the filtered players
