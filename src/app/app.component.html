@@ -6,7 +6,7 @@
     </a>
     <div *ngIf="(teams$ | async) as teams" class="teams-container">
 
-      <mat-accordion>
+      <mat-accordion *ngIf="teams.length > 0">
         <mat-expansion-panel>
           <mat-expansion-panel-header>
             <mat-panel-title>
@@ -18,7 +18,35 @@
           </mat-expansion-panel-header>
 
           <mat-action-list>
-            <button mat-list-item *ngFor="let team of teams" (click)="selectTeam(team)">Created {{toHuman(team.created_at)}}</button>
+            <mat-list-item *ngFor="let team of teams" (click)="selectTeam(team)">
+              <h5 matLine>Goalkeeper</h5>
+              <div matLine>
+                <div class="team-avatar" *ngFor="let player of getByPosition(team, 'Goalkeeper')">
+                  <img *ngIf="player.images.length > 0" [src]="player.images[0].url"/>
+                </div>
+              </div>
+              <h5 matLine>Defenders</h5>
+              <div matLine>
+                <div class="team-avatar" *ngFor="let player of getByPosition(team, 'Defender')">
+                  <img *ngIf="player.images.length > 0" [src]="player.images[0].url"/>
+                </div>
+              </div>
+              <h5 matLine>Midfielders</h5>
+              <div matLine>
+                <div class="team-avatar" *ngFor="let player of getByPosition(team, 'Midfielder')">
+                  <img *ngIf="player.images.length > 0" [src]="player.images[0].url"/>
+                </div>
+              </div>
+              <h5 matLine>Forwards</h5>
+              <div matLine>
+                <div class="team-avatar" *ngFor="let player of getByPosition(team, 'Forward')">
+                  <img *ngIf="player.images.length > 0" [src]="player.images[0].url"/>
+                </div>
+              </div>
+              <div matLine>
+                Created {{toHuman(team.created_at)}}
+              </div>
+            </mat-list-item>
           </mat-action-list>
         </mat-expansion-panel>
       </mat-accordion>
@@ -30,12 +58,22 @@
     <div
       #availablePlayersList="cdkDropList"
       cdkDropList class="players-list"
-      [cdkDropListData]="availablePlayers"
-      [cdkDropListConnectedTo]="[selectedPlayers0, selectedPlayers1, selectedPlayers2, selectedPlayers3, selectedPlayers4, selectedPlayers5, selectedPlayers6, selectedPlayers7, selectedPlayers8, selectedPlayers9, selectedPlayers10, selectedPlayers11]">
+      [cdkDropListData]="filteredPlayers()"
+      [cdkDropListConnectedTo]="getConnectedItems()">
       <mat-card class="player" cdkDrag *ngFor="let player of filteredPlayers()" [ngClass]="{'selected': isSelected(player.number)}">
-        {{player.number}} <span class="name">{{player.name}} - {{capitalizeText(player.position)}}</span>
+        <img matListAvatar *ngIf="player.images.length > 0" [src]="player.images[0].url" alt="{{player.name}}">
+        <div class="player-info">
+          <div class="content">
+            <h4>{{player.name}}</h4>
+            <span>{{player.position}}</span>
+          </div>
+        </div>
+        <div class="player-number">
+          <span>{{player.number}}</span>
+          <div [inlineSVG]="jerseySVG"></div>
+        </div>
         <div *cdkDragPreview>
-          <img [src]="jerseySVG" />
+          <div [inlineSVG]="jerseySVG"></div>
           <span>{{player.number}}</span>
         </div>
       </mat-card>
@@ -58,137 +96,33 @@
       <div class="middle-circle"></div>
       <div class="interior"></div>
       <div class="penalty"></div>
-      <mat-grid-list cols="12" rowHeight="65px" class="players-field">
-        <mat-grid-tile
-            cdkDropList
-            [colspan]="4"
-            [rowspan]="2"
-            #selectedPlayers0="cdkDropList"
-            [cdkDropListData]="selectedPlayers"
-            (cdkDropListDropped)="drop($event, 0)"
-            [cdkDropListConnectedTo]="[availablePlayersList]" (click)="removeItem(0)">
-            <span class="number">{{selectedPlayers[0]?.number}}</span>
-            <img [src]="jerseySVG" cdkDrag [cdkDragDisabled]="true"/>
-        </mat-grid-tile>
-        <mat-grid-tile
-            [colspan]="8">
-        </mat-grid-tile>
-        <mat-grid-tile
-            cdkDropList
-            [colspan]="4"
-            [rowspan]="2"
-            #selectedPlayers1="cdkDropList"
-            [cdkDropListData]="selectedPlayers"
-            (cdkDropListDropped)="drop($event, 1)"
-            [cdkDropListConnectedTo]="[availablePlayersList]" (click)="removeItem(1)">
-            <span class="number">{{selectedPlayers[1]?.number}}</span>
-            <img [src]="jerseySVG" cdkDrag [cdkDragDisabled]="true"/>
-        </mat-grid-tile>
-        <mat-grid-tile
-            cdkDropList
-            [colspan]="4"
-            [rowspan]="2"
-            #selectedPlayers2="cdkDropList"
-            [cdkDropListData]="selectedPlayers"
-            (cdkDropListDropped)="drop($event, 2)"
-            [cdkDropListConnectedTo]="[availablePlayersList]" (click)="removeItem(2)">
-            <span class="number">{{selectedPlayers[2]?.number}}</span>
-            <img [src]="jerseySVG" cdkDrag [cdkDragDisabled]="true"/>
-        </mat-grid-tile>
-        <mat-grid-tile
-            cdkDropList
-            [colspan]="4"
-            #selectedPlayers3="cdkDropList"
-            [cdkDropListData]="selectedPlayers"
-            (cdkDropListDropped)="drop($event, 3)"
-            [cdkDropListConnectedTo]="[availablePlayersList]" (click)="removeItem(3)">
-            <span class="number">{{selectedPlayers[3]?.number}}</span>
-            <img [src]="jerseySVG" cdkDrag [cdkDragDisabled]="true"/>
-        </mat-grid-tile>
-        <mat-grid-tile
-            cdkDropList
-            [colspan]="2"
-            [rowspan]="2"
-            #selectedPlayers4="cdkDropList"
-            [cdkDropListData]="selectedPlayers"
-            (cdkDropListDropped)="drop($event, 4)"
-            [cdkDropListConnectedTo]="[availablePlayersList]" (click)="removeItem(4)">
-            <span class="number">{{selectedPlayers[4]?.number}}</span>
-            <img [src]="jerseySVG" cdkDrag [cdkDragDisabled]="true"/>
-        </mat-grid-tile>
-        <mat-grid-tile
-            [colspan]="2" [rowspan]="2">
-        </mat-grid-tile>
-        <mat-grid-tile
-            cdkDropList
-            [colspan]="4"
-            [rowspan]="2"
-            #selectedPlayers5="cdkDropList"
-            [cdkDropListData]="selectedPlayers"
-            (cdkDropListDropped)="drop($event, 5)"
-            [cdkDropListConnectedTo]="[availablePlayersList]" (click)="removeItem(5)">
-            <span class="number">{{selectedPlayers[5]?.number}}</span>
-            <img [src]="jerseySVG" cdkDrag [cdkDragDisabled]="true"/>
-        </mat-grid-tile>
-        <mat-grid-tile
-            cdkDropList
-            [colspan]="4"
-            [rowspan]="2"
-            #selectedPlayers6="cdkDropList"
-            [cdkDropListData]="selectedPlayers"
-            (cdkDropListDropped)="drop($event, 6)"
-            [cdkDropListConnectedTo]="[availablePlayersList]" (click)="removeItem(6)">
-            <span class="number">{{selectedPlayers[6]?.number}}</span>
-            <img [src]="jerseySVG" cdkDrag [cdkDragDisabled]="true"/>
-        </mat-grid-tile>
-        <mat-grid-tile
-            cdkDropList
-            [colspan]="4"
-            [rowspan]="2"
-            #selectedPlayers7="cdkDropList"
-            [cdkDropListData]="selectedPlayers"
-            (cdkDropListDropped)="drop($event, 7)"
-            [cdkDropListConnectedTo]="[availablePlayersList]" (click)="removeItem(7)">
-            <span class="number">{{selectedPlayers[7]?.number}}</span>
-            <img [src]="jerseySVG" cdkDrag [cdkDragDisabled]="true"/>
-        </mat-grid-tile>
-        <mat-grid-tile
-            [colspan]="8"
+      <mat-grid-list cols="12" class="players-field" [rowHeight]="getRowHeight()">
+        <ng-template ngFor let-item [ngForOf]="[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]" let-i="index">
+          <mat-grid-tile
+            *ngIf="isDefenderRow(i) || isMidfielderRow(i)"
+            [colspan]="isDefenderRow(i) ? 2 : 4"
             >
-        </mat-grid-tile>
-        <mat-grid-tile
-            cdkDropList
-            [colspan]="4"
-            [rowspan]="2"
-            #selectedPlayers8="cdkDropList"
-            [cdkDropListData]="selectedPlayers"
-            (cdkDropListDropped)="drop($event, 8)"
-            [cdkDropListConnectedTo]="[availablePlayersList]" (click)="removeItem(8)">
-            <span class="number">{{selectedPlayers[8]?.number}}</span>
-            <img [src]="jerseySVG" cdkDrag [cdkDragDisabled]="true"/>
-        </mat-grid-tile>
-        <mat-grid-tile
-            cdkDropList
-            [colspan]="4"
-            [rowspan]="2"
-            #selectedPlayers9="cdkDropList"
-            [cdkDropListData]="selectedPlayers"
-            (cdkDropListDropped)="drop($event, 9)"
-            [cdkDropListConnectedTo]="[availablePlayersList]" (click)="removeItem(9)">
-            <span class="number">{{selectedPlayers[9]?.number}}</span>
-            <img [src]="jerseySVG" cdkDrag [cdkDragDisabled]="true"/>
-        </mat-grid-tile>
-        <mat-grid-tile
-            cdkDropList
-            [colspan]="4"
-            [rowspan]="2"
-            #selectedPlayers10="cdkDropList"
-            [cdkDropListData]="selectedPlayers"
-            (cdkDropListDropped)="drop($event, 10)"
-            [cdkDropListConnectedTo]="[availablePlayersList]" (click)="removeItem(10)">
-            <span class="number">{{selectedPlayers[10]?.number}}</span>
-            <img [src]="jerseySVG" cdkDrag [cdkDragDisabled]="true"/>
-        </mat-grid-tile>
+          </mat-grid-tile>
+          <mat-grid-tile
+              cdkDropList
+              [colspan]="2"
+              id="selectedPlayers{{i}}"
+              [cdkDropListData]="selectedPlayers"
+              (cdkDropListDropped)="drop($event, i)"
+              [cdkDropListConnectedTo]="[availablePlayersList]" (click)="removeItem(i)">
+              <div class="player-field">
+                <div class="number">
+                  <div [inlineSVG]="jerseySVG"></div>
+                  <span>{{selectedPlayers[i]?.number}}</span>
+                </div>
+                <h4>{{selectedPlayers[i]?.name}}</h4>
+              </div>
+          </mat-grid-tile>
+          <mat-grid-tile
+            [colspan]="isDefenderRow(i) ? 8 : 2"
+            >
+          </mat-grid-tile>
+        </ng-template>
       </mat-grid-list>
       <!-- <h1>Test</h1> -->
     </div>

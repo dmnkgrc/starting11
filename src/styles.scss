@@ -10,7 +10,7 @@ body {
 
 /** The drag preview **/
 .cdk-drag-preview {
-  img {
+  svg {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -24,7 +24,20 @@ body {
     transform: translate(-50%, -50%);
     z-index: 100;
     color: #fff;
-    font-size: 22px;
+    font-size: 20px;
+  }
+}
+
+.mat-grid-tile {
+  overflow: visible;
+}
+
+svg {
+  width: 48px;
+  height: 54px;
+  path:first-child {
+    // Make them Manchester City's blue
+    fill: #5BADFF;
   }
 }
 
@@ -167,35 +180,35 @@ body {
       top: 50%;
       transform: translateY(-50%);
       .cdk-drop-list-dragging {
-        img {
-          height: 68;
-          width: 60;
-          transform: unset !important;
+        .number {
+          svg {
+            transform: translate(-50%, -50%) scale(1.1) !important;
+          }
+        }
+      }
+      .player-field {
+        position: absolute;
+        width: auto;
+        height: auto;
+        h4 {
+          margin-top: 5px;
+          margin-bottom: 0px;
         }
         .number {
-          display: none;
+          position: relative;
+          height: 54px;
+          span, svg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            color: #fff;
+            transform: translate(-50%, -50%);
+            font-size: 21px;
+          }
         }
-      }
-      .number {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        color: #fff;
-        transform: translate(-50%, -50%);
-        font-size: 22px;
       }
       .player {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%)  !important;
-        background: transparent;
-        color: #fff;
-        box-shadow: none;
-        font-size: 24px;
-        .name {
-          display: none;
-        }
+        display: none;
         // display: none;
       }
     }
@@ -213,6 +226,15 @@ body {
         padding: 0;
         .mat-list-item {
           border-bottom: 1px solid #f3f3f3;
+          .team-avatar {
+            display: inline-block;
+            img {
+              width: 30px;
+              height: 30px;
+              border-radius: 30px;
+              margin: 2px;
+            }
+          }
         }
       }
     }
@@ -236,6 +258,68 @@ body {
         margin-bottom: 10px;
         &.selected {
           background: #32B846;
+        }
+        .mat-list-avatar {
+          width: 40px;
+          height: 40px;
+          border-radius: 40px;
+          float: left;
+        }
+        .player-info {
+          position: absolute;
+          left: 55px;
+          top: 0;
+          height: 100%;
+          width: calc(100% - 110px);
+          .content {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            h4 {
+              margin: 0;
+              font-size: 16px;
+            }
+            span {
+              font-size: 16px;
+              font-weight: 400;
+              color: #999;
+            }
+          }
+        }
+        .player-number {
+          float: right;
+          position: relative;
+          height: 40px;
+          width: 40px;
+          span {
+            position: absolute;
+            z-index: 10;
+            left: 50%;
+            top: 50%;
+            font-size: 14px;
+            transform: translate(-50%, -50%);
+          }
+          svg {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            height: 41px;
+            width: 36px;
+            path:first-child {
+              fill: #fff;
+            }
+            path:last-child {
+              fill: #4a4a4a;
+            }
+          }
+        }
+        &.selected {
+          .player-info {
+            span {
+              color: #fff;
+            }
+          }
         }
       }
     }

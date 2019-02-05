@@ -3,18 +3,32 @@ import * as express from "express";
 import * as mongoose from "mongoose";
 const app = express();
 
-mongoose.connect(
-  "mongodb://dmnkgrc:DLQNdT8BynRzFNy@ds121105.mlab.com:21105/starting11",
-  { useNewUrlParser: true }
-);
+mongoose.connect("mongodb://127.0.0.1:27017/starting11", {
+  useNewUrlParser: true
+});
 
+// Team Schema
 const schema = new mongoose.Schema(
   {
     players: [
       {
         name: String,
         number: Number,
-        position: String
+        position: String,
+        images: [
+          {
+            url: String,
+            width: Number,
+            height: Number
+          }
+        ],
+        first_name: String,
+        last_name: String,
+        country: { name: String, code: String },
+        birth_date: String,
+        age: Number,
+        height: Number,
+        weight: Number
       }
     ]
   },

@@ -3,6 +3,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { NgModule } from "@angular/core";
 import { HttpClientModule } from "@angular/common/http";
+import { InlineSVGModule } from "ng-inline-svg";
 import {
   MatButtonModule,
   MatCardModule,
@@ -39,6 +40,7 @@ import { AppComponent } from "./app.component";
     HttpClientModule,
     MatExpansionModule,
     MatListModule,
+    InlineSVGModule.forRoot({ baseUrl: "" }),
     DeviceDetectorModule.forRoot()
   ],
   providers: [],

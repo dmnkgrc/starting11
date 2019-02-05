@@ -7,7 +7,7 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e",
+    "e2e": "concurrently \"ng e2e\" \"ts-node-dev --project server/tsconfig.json server/server.ts \"",
     "server": "concurrently \"ng serve\" \"ts-node-dev --project server/tsconfig.json server/server.ts \""
   },
   "private": true,
@@ -28,6 +28,7 @@
     "lodash": "^4.17.11",
     "material-design-icons": "^3.0.1",
     "moment": "^2.24.0",
+    "ng-inline-svg": "^8.3.0",
     "ngx-device-detector": "^1.3.5",
     "rxjs": "~6.3.3",
     "tslib": "^1.9.0",

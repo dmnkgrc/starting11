@@ -10,6 +10,6 @@ export class AppPage {
   }
 
   getJersey() {
-    return element(by.css("app-root img")).getAttribute("src") as Promise<string>;
+    return element(by.css("app-root svg"));
   }
 }
