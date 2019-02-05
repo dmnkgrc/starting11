@@ -11,6 +11,11 @@ This is a normal Angular 7 project containing a basic Express server (for the AP
 - src/app Contains the code for the Angular app
 - src/app Contains the assets for the app
 
+## Requirements
+
+- Node greater that 8.10.0
+- Angular Cli: `npm -g install @angular/cli`
+
 ## Getting Started
 
 - Run `npm install` in the root directory and inside the server/ directory
